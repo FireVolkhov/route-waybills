@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html ng-app="waybills" ng-controller="mainCtrl">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Путевые листы</title>
+    <!--<link rel="stylesheet" href="./libs/bootstrap/dist/css/bootstrap.css">-->
+    <!--<link rel="stylesheet" href="./libs/leaflet/dist/leaflet.css">-->
+    <link rel="stylesheet" href="./app/css/bootstrap.css">
+    <link rel="stylesheet" href="./app/css/leaflet.css">
+    <link rel="stylesheet" href="./app/css/main.css">
+    <!--<script src="./libs/leaflet/dist/leaflet-src.js"></script>-->
+    <!--<script src="./libs/angular/angular.js"></script>-->
+    <script src="./app/libs/leaflet.js"></script>
+    <script src="./app/libs/angular.min.js"></script>
+    <script src="./app/app.js"></script>
+    <script src="./app/modules/underscore.js"></script>
+    <script src="./app/modules/leaflet.js"></script>
+    <script src="./app/modules/osrm.js"></script>
+    <script src="./app/modules/nominatim.js"></script>
+    <script src="./app/modules/point.js"></script>
+    <script src="./app/modules/file-saver.js"></script>
+</head>
+<body>
+    <div map-leaflet class="map"></div>
+    <div class="waybill">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="row">
+                        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">Маршрут</div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                            <div class="path">{{route.total || 0 | number: 1}} км</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <button class="btn btn-sm btn-default" ng-class="{active: route.closed}" type="button" ng-click="route.closed = !route.closed">Замкнутый марщрут</button>
+                </div>
+                <div class="modal-body routes">
+                    <div ng-hide="route.points.length">
+                        <h3>Маршрут пуст</h3>
+                    </div>
+                    <div ng-hide="!route.points.length">
+                        <div class="row">
+                            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
+                                <div ng-repeat="point in route.points" class="input-group route">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-info small" type="button" ng-disabled="!point.edit" ng-click="up(point)">
+                                            <i class="glyphicon glyphicon-chevron-up"></i>
+                                        </button>
+                                        <button class="btn btn-info small" type="button" ng-disabled="!point.edit" ng-click="down(point)">
+                                            <i class="glyphicon glyphicon-chevron-down"></i>
+                                        </button>
+                                    </div>
+                                    <input class="form-control" type="text" ng-disabled="!point.edit" data-ng-model="point.address" ng-change="change(point)">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-danger" type="button" ng-disabled="!point.edit" ng-click="deletePoint(point)">
+                                            <i class="glyphicon glyphicon-remove"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 paths">
+                                <div ng-repeat="distance in route.distances">
+                                    <div class="label label-info path">{{distance | number: 1}} км</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <button class="btn btn-sm btn-danger" type="button" ng-click="deleteRoute()">Очистить маршрут</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="input-group">
+                                <input class="form-control" type="text" data-ng-model="newPoint.address" ng-change="change(newPoint)">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-success" type="button" ng-disabled="!newPoint.marker" ng-click="addPoint(newPoint)">
+                                        <i class="glyphicon glyphicon-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" ng-click="close()">Отмена</button>
+                    <button type="button" class="btn btn-success" ng-disabled="route.points.length < 2" ng-click="ok()">Завершить</button>
+                    <button type="button" class="btn btn-success" ng-disabled="route.points.length < 2" ng-click="save()"><i class="glyphicon glyphicon-save"></i></button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div>
+    </div>
+    <input ng-hide="true" id="file.gpx" data-ng-model="gpx">
+</body>
+</html>
