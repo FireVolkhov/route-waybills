@@ -12,7 +12,23 @@
 	angular.module('waybills', ['underscore', 'Leaflet', 'osrm', 'nominatim', 'point', 'file-saver'])
 		.controller('mainCtrl', ['underscore', '$scope', '$timeout', '$window', 'osrm', 'nominatim', 'Point', 'saveAs', function(underscore, $scope, $timeout, $window, osrm, nominatim, Point, saveAs){
 			var debounceFinishChange = underscore.debounce(finishChange, 150),
-				setCoordinatesForChildren;
+				setCoordinatesForChildren,
+				greenIcon = L.icon({
+					iconUrl: 'app/libs/images/marker-icon-green.png',
+					shadowUrl: 'app/libs/images/marker-shadow.png',
+					iconSize:     [25, 41], // size of the icon
+					shadowSize:   [41, 41], // size of the shadow
+					iconAnchor:   [12, 41], // point of the icon which will correspond to marker's location
+					shadowAnchor: [12, 41]
+				}),
+				blueIcon = L.icon({
+					iconUrl: 'app/libs/images/marker-icon.png',
+					shadowUrl: 'app/libs/images/marker-shadow.png',
+					iconSize:     [25, 41], // size of the icon
+					shadowSize:   [41, 41], // size of the shadow
+					iconAnchor:   [12, 41], // point of the icon which will correspond to marker's location
+					shadowAnchor: [12, 41]
+				});
 
 			$scope.route = {
 				points: [],
@@ -27,6 +43,7 @@
 				$scope.map.on('click', function(event){
 					if ($scope.route.closed) offClosed();
 					var point = new Point($scope.map, event.latlng.lat, event.latlng.lng);
+					point.setIcon(blueIcon);
 					point.reverse();
 					point.onChangeEvent(debounceFinishChange);
 					point.marker.on('click', function(){
@@ -57,6 +74,7 @@
 
 			$scope.addPoint = function(point){
 				if ($scope.route.closed) offClosed();
+				point.setIcon(blueIcon);
 				$scope.route.points.push(point);
 				if ($scope.route.closed) onClosed();
 				$scope.newPoint = new Point($scope.map);
@@ -129,6 +147,11 @@
 
 			$scope.change = function(point){
 			    point.change(debounceFinishChange);
+			};
+
+			$scope.changeNewPoint = function(point){
+				point.setIcon(greenIcon);
+				$scope.change(point);
 			};
 
 			$scope.close = function(){

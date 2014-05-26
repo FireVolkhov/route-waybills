@@ -24,6 +24,7 @@ angular.module('point', ['underscore', 'nominatim'])
 
 			this._map = map;
 			this._changeListeners = [];
+			this._icon = null;
 
 			this._debounceGetNominatim = underscore.debounce(function(){
 			    return point._getNominatim();
@@ -84,6 +85,13 @@ angular.module('point', ['underscore', 'nominatim'])
 		    return new Point(this._map, this.coordinates.lat, this.coordinates.lon);
 		};
 
+		Point.prototype.setIcon = function(icon){
+		    this._icon = icon;
+			if (this.marker){
+				this.marker.setIcon(this._icon);
+			}
+		};
+
 		Point.prototype.addOnMap = function(map){
 		    if (this._map != map){
 				this._removeMarker();
@@ -133,6 +141,10 @@ angular.module('point', ['underscore', 'nominatim'])
 				this.marker = L.marker(latLon, {draggable: true});
 				this.marker.on('drag', drag);
 				this.marker.on('dragend', drag);
+
+				if (this._icon){
+					this.marker.setIcon(this._icon);
+				}
 
 				this._addOnMap();
 			}
