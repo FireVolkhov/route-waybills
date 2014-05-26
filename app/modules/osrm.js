@@ -73,14 +73,23 @@ angular.module('osrm', [])
 				angular.forEach(results, function(val, key){
 					var point = points[key];
 
-					result += "\t<wpt lat=\"" + point.coordinates.lat + "\" lon=\"" + point.coordinates.lon + "\"><name>Start</name></wpt>\n";
+					result += "\t<wpt lat=\"" + point.coordinates.lat + "\" lon=\"" + point.coordinates.lon + "\"><name>" + (key == 0 ? "Start" : "Point_" + key) + "</name></wpt>\n";
 					result += "\t<trkseg>\n";
 
-					result += val
+					val = val
 						.replace(/[\w\W]*<rte>/, "")
 						.replace(/<\/rte>[\w\W]*/, "")
 						.replace(/<rtept/g, "\t\t<trkpt")
 						.replace(/<\/rtept>/g, "</trkpt>\n");
+
+					val = val.split("\n");
+
+					angular.forEach(val, function(pt, index){
+					    result += pt + "\n";
+						if ((index + 1) % 20 == 0 && index < val.length){
+							result += "\t</trkseg>\n\t<trkseg>\n";
+						}
+					});
 
 					result += "\t</trkseg>\n";
 				});
