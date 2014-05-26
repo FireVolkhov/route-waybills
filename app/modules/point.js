@@ -7,8 +7,8 @@
  */
 "use strict";
 
-angular.module('point', ['underscore', 'nominatim'])
-	.factory('Point', ['underscore', 'nominatim', function(underscore, nominatim){
+angular.module('point', ['underscore', 'nominatim', 'osrm'])
+	.factory('Point', ['underscore', 'nominatim', 'osrm', function(underscore, nominatim, osrm){
 		var Point;
 
 		Point = function(map, lat, lon){
@@ -37,6 +37,7 @@ angular.module('point', ['underscore', 'nominatim'])
 				this.coordinates.lat = lat;
 				this.coordinates.lon = lon;
 				this._createMarker();
+				this._getLocation();
 			}
 		};
 
@@ -59,6 +60,7 @@ angular.module('point', ['underscore', 'nominatim'])
 				this.coordinates.lat = lat;
 				this.coordinates.lon = lon;
 				this._createMarker(true);
+				this._getLocation();
 			}
 		};
 
@@ -98,6 +100,14 @@ angular.module('point', ['underscore', 'nominatim'])
 				this._map = map;
 				this._addOnMap(true);
 			}
+		};
+
+		Point.prototype._getLocation = function(){
+			var point = this;
+		    osrm.getLocation(this).then(function(result){
+		        point.coordinates = result;
+				point._createMarker();
+		    });
 		};
 
 		Point.prototype._getNominatim = function(){

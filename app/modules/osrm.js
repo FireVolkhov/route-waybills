@@ -12,12 +12,21 @@ angular.module('osrm', [])
 		var osrm = {};
 
 //		osrm.url = "http://mapserver.aldi-service.ru/osm/";
-		osrm.url = "http://router.project-osrm.org/viaroute";
+		osrm.url = "http://router.project-osrm.org/";
 		osrm.output = "json";
 		osrm.countInOneRequvest = 2;
 		osrm.countInOneRequvestForGpx = 2;
 		osrm.zoomForGpx = 14;
 		osrm.instructions = "true";
+
+		osrm.getLocation = function(point){
+		    return $http.get(osrm.url + "locate?loc=" + point.coordinates.lat + "," + point.coordinates.lon).then(function(result){
+				return{
+					lat: result.data.mapped_coordinate[0],
+					lon: result.data.mapped_coordinate[1]
+				};
+		    });
+		};
 
 		osrm.getRoute = function(points, scale){
 			var length = points.length,
@@ -108,7 +117,7 @@ angular.module('osrm', [])
 		function getRoute(points, key, scale){
 			var lenght, end, query, point;
 
-			query = osrm.url + "?output=" + osrm.output + "&instructions=" + osrm.instructions + "&z=" + scale;
+			query = osrm.url + "viaroute?output=" + osrm.output + "&instructions=" + osrm.instructions + "&z=" + scale;
 
 			for (lenght = points.length, end = key + osrm.countInOneRequvest; key < lenght && key < end; key ++){
 				point = points[key];
@@ -123,7 +132,7 @@ angular.module('osrm', [])
 		function getGpx(points, key){
 			var lenght, end, query, point;
 
-			query = osrm.url + "?output=gpx&instructions=" + osrm.instructions + "&z=" + osrm.zoomForGpx;
+			query = osrm.url + "viaroute?output=gpx&instructions=" + osrm.instructions + "&z=" + osrm.zoomForGpx;
 
 			for (lenght = points.length, end = key + osrm.countInOneRequvestForGpx; key < lenght && key < end; key ++){
 				point = points[key];
