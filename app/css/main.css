@@ -1,0 +1,96 @@
+body{
+    margin: 0;
+}
+.map{
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    position: fixed;
+}
+.waybill{
+    position: fixed;
+    margin-top: 20px;
+    margin-left: 20px;
+    width: 450px;
+
+    font: Helvetica,Arial,sans-serif;
+}
+.modal-dialog{
+    width: 100%;
+    margin: 0;
+}
+.modal-content{
+    border-radius: 0;
+}
+.waybill .path{
+    float: right;
+}
+.waybill .modal-header{
+    padding: 7px 24px 6px 24px;
+    border-bottom: 1px solid #d9d7d3;
+    color: #222;
+    white-space: nowrap;
+    font: 22px/24px Helvetica,Arial,sans-serif;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.waybill .routes{
+    background-color: #fffaeb;
+    max-height: 450px;
+    overflow-y: auto;
+}
+.waybill .modal-body{
+    padding: 7px 20px;
+    border-bottom: 1px solid #d9d7d3;
+}
+.waybill .modal-footer{
+    margin-top: 0;
+    border-top: none;
+}
+.waybill .btn,
+.waybill .form-control{
+    border-radius: 0;
+}
+.waybill .btn.small{
+    padding-left: 6px;
+    padding-right: 6px;
+}
+.waybill .route{
+    margin-bottom: 5px;
+}
+.waybill .btn.btn-sm{
+    border-radius: 2px;
+    padding: 2px 20px;
+    border: none;
+    box-shadow: 0 0 0 1px rgba(0,0,0,.05)inset,0 -1px rgba(0,0,0,.1)inset;
+}
+.waybill .btn.btn-sm.active,
+.waybill .btn.btn-sm:active{
+    box-shadow: 0 0 0 1px rgba(0,0,0,.05)inset,0 -1px rgba(0,0,0,.1)inset, inset 0 3px 5px rgba(0, 0, 0, .125);
+}
+.waybill .btn.btn-sm.focus,
+.waybill .btn.btn-sm:focus{
+    outline: none;
+}
+.waybill .btn.btn-sm.btn-default.active,
+.waybill .btn.btn-sm.btn-default:active{
+    background-color: #b2e3f0;
+    background-image: linear-gradient(to bottom,#9fdeed 0%,#c5eaf5 100%);
+    box-shadow: 0 1px 3px 0 #00a6d1 inset,0 1px 0 rgba(255,255,255,.5);
+    color: #056;
+    outline: none;
+}
+.waybill .btn.btn-sm.btn-default{
+    background-color: #f0e0d3;
+}
+.waybill .routes .paths{
+    padding-top: 11px;
+}
+.waybill .routes .path{
+    font-size: 17px;
+    margin-top: 14px;
+    border-radius: 2px;
+}
+.waybill .modal-footer .btn{
+    font-size: 25px;
+}
