@@ -132,13 +132,15 @@
 			};
 
 			$scope.close = function(){
-
+				$window.document.body.fireEvent('cancel', $window.document.createEventObject());
 			};
 
 			$scope.ok = function(){
 				osrm.getGpx($scope.route.points).then(function(result){
 					$scope.gpx = result;
-					$window.document.body.fireEvent('complete', $window.document.createEventObject());
+					$timeout(function(){
+						$window.document.body.fireEvent('complete', $window.document.createEventObject());
+					});
 				});
 			};
 
