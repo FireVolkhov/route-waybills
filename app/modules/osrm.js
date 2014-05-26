@@ -15,7 +15,7 @@ angular.module('osrm', [])
 		osrm.url = "http://router.project-osrm.org/viaroute";
 		osrm.output = "json";
 		osrm.countInOneRequvest = 2;
-		osrm.countInOneRequvestForGpx = 25;
+		osrm.countInOneRequvestForGpx = 2;
 		osrm.zoomForGpx = 14;
 		osrm.instructions = "true";
 
@@ -61,12 +61,35 @@ angular.module('osrm', [])
 			}
 
 			return $q.all(promises).then(function(results){
-				var result = "";
-				angular.forEach(results, function(val){
-					result = result.replace(/<\/rte>[\w\W]*/, "");
-					val = (result)? val.replace(/[\w\W]*<rte>/, "") : val;
-					result += val;
+				var last = points[points.length -1],
+					result = "<?xml version='1.0' encoding='UTF-8'?>\n" +
+						"\t<gpx version='1.1' creator='Interactive WayLogger'" +
+						"\txmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'\n" +
+						"\txmlns='http://www.topografix.com/GPX/1/1'\n" +
+						"\txsi:schemaLocation='http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd'>\n" +
+
+						"\t<trk><name>" + new Date().toLocaleString().replace(" ", "_") + "</name>\n";
+
+				angular.forEach(results, function(val, key){
+					var point = points[key];
+
+					result += "\t<wpt lat=\"" + point.coordinates.lat + "\" lon=\"" + point.coordinates.lon + "\"><name>Start</name></wpt>\n";
+					result += "\t<trkseg>";
+
+					result += val
+						.replace(/[\w\W]*<rte>/, "")
+						.replace(/<\/rte>[\w\W]*/, "")
+						.replace(/<rtept/g, "\t<trkpt")
+						.replace(/<\/rtept>/g, "</trkpt>\n");
+
+					result += "\t</trkseg>";
 				});
+
+				result += "\t<wpt lat=\"" + last.coordinates.lat + "\" lon=\"" + last.coordinates.lon + "\"><name>Stop</name></wpt>\n";
+
+				result += "\t</trk>";
+				result += "</gpx>";
+
 				return result;
 			});
 		};
