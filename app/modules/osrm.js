@@ -74,20 +74,20 @@ angular.module('osrm', [])
 					var point = points[key];
 
 					result += "\t<wpt lat=\"" + point.coordinates.lat + "\" lon=\"" + point.coordinates.lon + "\"><name>Start</name></wpt>\n";
-					result += "\t<trkseg>";
+					result += "\t<trkseg>\n";
 
 					result += val
 						.replace(/[\w\W]*<rte>/, "")
 						.replace(/<\/rte>[\w\W]*/, "")
-						.replace(/<rtept/g, "\t<trkpt")
+						.replace(/<rtept/g, "\t\t<trkpt")
 						.replace(/<\/rtept>/g, "</trkpt>\n");
 
-					result += "\t</trkseg>";
+					result += "\t</trkseg>\n";
 				});
 
 				result += "\t<wpt lat=\"" + last.coordinates.lat + "\" lon=\"" + last.coordinates.lon + "\"><name>Stop</name></wpt>\n";
 
-				result += "\t</trk>";
+				result += "\t</trk>\n";
 				result += "</gpx>";
 
 				return result;
