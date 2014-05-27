@@ -18,6 +18,7 @@ angular.module('osrm', [])
 		osrm.countInOneRequvestForGpx = 2;
 		osrm.zoomForGpx = 14;
 		osrm.instructions = "true";
+		osrm._cache = {};
 
 		osrm.getLocation = function(point){
 		    return $http.get(osrm.url + "locate?loc=" + point.coordinates.lat + "," + point.coordinates.lon).then(function(result){
@@ -121,7 +122,7 @@ angular.module('osrm', [])
 		return osrm;
 
 		function getRoute(points, key, scale){
-			var lenght, end, query, point;
+			var lenght, end, query, point, promise;
 
 			query = osrm.url + "viaroute?output=" + osrm.output + "&instructions=" + osrm.instructions + "&z=" + scale;
 
@@ -130,9 +131,16 @@ angular.module('osrm', [])
 				query += "&loc=" + point.coordinates.lat + "," + point.coordinates.lon;
 			}
 
-		    return $http.get(query, {}).then(function(result){
-				return result.data;
-			});
+			if (osrm._cache[query]){
+				return $q.when(osrm._cache[query]);
+			} else {
+				return $http.get(query, {}).then(function(result){
+					if (result.data){
+						osrm._cache[query] = result.data;
+					}
+					return result.data;
+				});
+			}
 		}
 
 		function getGpx(points, key){
