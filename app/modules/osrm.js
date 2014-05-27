@@ -11,8 +11,8 @@ angular.module('osrm', [])
 	.service('osrm', ['$http', '$q', function($http, $q){
 		var osrm = {};
 
-		osrm.url = "http://mapserver.aldi-service.ru:5000/";
-//		osrm.url = "http://router.project-osrm.org/"
+//		osrm.url = "http://mapserver.aldi-service.ru:5000/";
+		osrm.url = "http://router.project-osrm.org/";
 		osrm.output = "json";
 		osrm.countInOneRequvest = 2;
 		osrm.countInOneRequvestForGpx = 2;
