@@ -44,7 +44,7 @@
                     <div ng-hide="!route.points.length">
                         <div class="row">
                             <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
-                                <div ng-repeat="point in route.points" class="input-group route">
+                                <div ng-repeat="point in route.points track by $index" class="input-group route">
                                     <div class="input-group-btn">
                                         <button class="btn btn-info small" type="button" ng-disabled="!point.edit" ng-click="up(point)">
                                             <i class="glyphicon glyphicon-chevron-up"></i>
@@ -78,7 +78,7 @@
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <div class="input-group">
-                                <input class="form-control" type="text" data-ng-model="newPoint.address" ng-change="changeNewPoint(newPoint)">
+                                <input class="form-control" type="text" data-ng-model="newPoint.address" ng-change="changeNewPoint(newPoint)" ng-enter="addPoint(newPoint)">
                                 <div class="input-group-btn">
                                     <button class="btn btn-success" type="button" ng-disabled="!newPoint.marker" ng-click="addPoint(newPoint)">
                                         <i class="glyphicon glyphicon-plus"></i>

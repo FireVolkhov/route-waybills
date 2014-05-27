@@ -10,7 +10,7 @@
 	"use strict";
 
 	angular.module('waybills', ['underscore', 'Leaflet', 'osrm', 'nominatim', 'point', 'file-saver'])
-		.controller('mainCtrl', ['underscore', '$scope', '$timeout', '$window', 'osrm', 'nominatim', 'Point', 'saveAs', function(underscore, $scope, $timeout, $window, osrm, nominatim, Point, saveAs){
+		.controller('mainCtrl', ['underscore', '$scope', '$timeout', '$window', '$location', 'osrm', 'nominatim', 'Point', 'saveAs', function(underscore, $scope, $timeout, $window, $location, osrm, nominatim, Point, saveAs){
 			var debounceFinishChange = underscore.debounce(finishChange, 150),
 				setCoordinatesForChildren,
 				greenIcon = L.icon({
@@ -60,6 +60,20 @@
 				});
 
 				$scope.newPoint = new Point($scope.map);
+
+				angular.forEach($location.$$search, function(val, key){
+					var point;
+
+				    if (key == "address" && val){
+						point = new Point($scope.map);
+						point.address = val;
+						point.change();
+						$scope.addPoint(point);
+					}
+					if (key == "city" && val){
+						nominatim.prefix = val;
+					}
+				});
 			});
 
 			$scope.$watch('route.closed', function(val){
@@ -231,5 +245,19 @@
 
 				return array;
 			}
-		}]);
+		}])
+
+		.directive('ngEnter', function () {
+			return function (scope, element, attrs) {
+				element.bind("keydown keypress", function (event) {
+					if(event.which === 13) {
+						scope.$apply(function (){
+							scope.$eval(attrs.ngEnter);
+						});
+
+						event.preventDefault();
+					}
+				});
+			};
+		});
 })(angular);

@@ -33,6 +33,12 @@ angular.module('osrm', [])
 				i = 0,
 				promises = [];
 
+			angular.forEach(points, function(val){
+			    if (!val.coordinates.lat && !val.coordinates.lon){
+					length --;
+				}
+			});
+
 			if (length > 1){
 				while(i < length -1){
 					promises.push(getRoute(points, i, scale));

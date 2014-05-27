@@ -156,7 +156,7 @@ angular.module('point', ['underscore', 'nominatim', 'osrm'])
 					this.marker.setIcon(this._icon);
 				}
 
-				this._addOnMap();
+				this._addOnMap(panTo);
 			}
 
 			function drag(){

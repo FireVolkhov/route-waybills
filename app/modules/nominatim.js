@@ -14,9 +14,11 @@ angular.module('nominatim', [])
 //		nominatim.url = "http://nominatim.aldi-service.ru/search.php";
 		nominatim.url = "http://nominatim.openstreetmap.org/";
 		nominatim.format = "json";
+		nominatim.prefix = "";
+
 		nominatim.search = function(query){
 			return $http.get(this.url + "search", {params: {
-				q: query,
+				q: nominatim.prefix + ", " + query,
 				format: this.format
 			}}).then(function(result){
 			    return result.data;
