@@ -11,8 +11,8 @@ angular.module('osrm', [])
 	.service('osrm', ['$http', '$q', function($http, $q){
 		var osrm = {};
 
-//		osrm.url = "http://mapserver.aldi-service.ru/osm/";
-		osrm.url = "http://router.project-osrm.org/";
+		osrm.url = "http://mapserver.aldi-service.ru:5000/";
+//		osrm.url = "http://router.project-osrm.org/"
 		osrm.output = "json";
 		osrm.countInOneRequvest = 2;
 		osrm.countInOneRequvestForGpx = 2;
@@ -21,7 +21,7 @@ angular.module('osrm', [])
 		osrm._cache = {};
 
 		osrm.getLocation = function(point){
-		    return $http.get(osrm.url + "locate?loc=" + point.coordinates.lat + "," + point.coordinates.lon).then(function(result){
+		    return $http.jsonp(osrm.url + "locate?output=" + osrm.output + "&jsonp=JSON_CALLBACK&loc=" + point.coordinates.lat + "," + point.coordinates.lon).then(function(result){
 				return{
 					lat: result.data.mapped_coordinate[0],
 					lon: result.data.mapped_coordinate[1]
@@ -124,7 +124,7 @@ angular.module('osrm', [])
 		function getRoute(points, key, scale){
 			var lenght, end, query, point, promise;
 
-			query = osrm.url + "viaroute?output=" + osrm.output + "&instructions=" + osrm.instructions + "&z=" + scale;
+			query = osrm.url + "viaroute?output=" + osrm.output + "&jsonp=JSON_CALLBACK" + "&instructions=" + osrm.instructions + "&z=" + scale;
 
 			for (lenght = points.length, end = key + osrm.countInOneRequvest; key < lenght && key < end; key ++){
 				point = points[key];
@@ -134,7 +134,7 @@ angular.module('osrm', [])
 			if (osrm._cache[query]){
 				return $q.when(osrm._cache[query]);
 			} else {
-				return $http.get(query, {}).then(function(result){
+				return $http.jsonp(query, {}).then(function(result){
 					if (result.data){
 						osrm._cache[query] = result.data;
 					}

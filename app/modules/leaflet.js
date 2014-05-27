@@ -9,8 +9,8 @@
 angular
 	.module('Leaflet', [])
 	.value('leafletConfig', {
-//		layerSrcUrl: 'http://mapserver.aldi-service.ru/osm/{z}/{x}/{y}.png',
-		layerSrcUrl: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+		layerSrcUrl: 'http://mapserver.aldi-service.ru/osm/{z}/{x}/{y}.png',
+//		layerSrcUrl: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 		attribution: '',
 		maxZoom: 18,
 

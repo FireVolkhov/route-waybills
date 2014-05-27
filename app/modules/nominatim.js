@@ -11,8 +11,8 @@ angular.module('nominatim', [])
 	.service('nominatim', ['$http', function($http){
 		var nominatim = {};
 
-//		nominatim.url = "http://nominatim.aldi-service.ru/search.php";
-		nominatim.url = "http://nominatim.openstreetmap.org/";
+		nominatim.url = "http://nominatim.aldi-service.ru/";
+//		nominatim.url = "http://nominatim.openstreetmap.org/";
 		nominatim.format = "json";
 		nominatim.prefix = "";
 
