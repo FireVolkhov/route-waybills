@@ -9,8 +9,8 @@
 (function(angular){
 	"use strict";
 
-	angular.module('waybills', ['underscore', 'Leaflet', 'osrm', 'nominatim', 'point', 'file-saver'])
-		.controller('mainCtrl', ['underscore', '$scope', '$timeout', '$window', '$location', 'osrm', 'nominatim', 'Point', 'saveAs', function(underscore, $scope, $timeout, $window, $location, osrm, nominatim, Point, saveAs){
+	angular.module('waybills', ['underscore', 'Leaflet', 'osrm', 'nominatim', 'point', 'file-saver', 'salesman'])
+		.controller('mainCtrl', ['underscore', '$scope', '$timeout', '$window', '$location', 'osrm', 'nominatim', 'Point', 'saveAs', 'salesman', function(underscore, $scope, $timeout, $window, $location, osrm, nominatim, Point, saveAs, salesman){
 			var debounceFinishChange = underscore.debounce(finishChange, 150),
 				setCoordinatesForChildren,
 				greenIcon = L.icon({
@@ -36,6 +36,9 @@
 			};
 			$scope.map = {};
 			$scope.gpx = "";
+
+			$scope.percent = 0;
+			$scope.calculate = false;
 
 			$timeout(function(){
 				new L.Control.Zoom({ position: 'topright' }).addTo($scope.map);
@@ -189,6 +192,26 @@
 					);
 					$scope.gpx = result;
 				});
+			};
+
+			$scope.optimizeRoute = function(){
+				$scope.calculate = true;
+
+				salesman.calculate($scope.route)
+					.then(function(route){
+						$scope.route = route;
+						debounceFinishChange();
+						if (route.closed) {
+							offClosed();
+							onClosed();
+						}
+					}, null, function(percent){
+						$scope.percent = Math.round(percent * 100);
+					})
+					.finally(function(){
+						$scope.percent = 0;
+						$scope.calculate = false;
+					});
 			};
 
 			function onClosed(){

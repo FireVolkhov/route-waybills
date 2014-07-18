@@ -20,6 +20,8 @@
     <script src="./app/modules/nominatim.js"></script>
     <script src="./app/modules/point.js"></script>
     <script src="./app/modules/file-saver.js"></script>
+    <script src="./app/modules/salesman.js"></script>
+    <script src="./app/modules/ant-algorithms.js"></script>
 </head>
 <body>
     <div map-leaflet class="map"></div>
@@ -30,7 +32,7 @@
                     <div class="row">
                         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">Маршрут</div>
                         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-                            <div class="path">{{route.total || 0 | number: 1}} км</div>
+                            <div class="path">пунктов {{(route.points.length - (route.closed ? (route.points.length ? 1 : 0): 0)) || 0}}, путь {{route.total || 0 | number: 1}} км</div>
                         </div>
                     </div>
                 </div>
@@ -62,14 +64,26 @@
                                 </div>
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 paths">
-                                <div ng-repeat="distance in route.distances">
+                                <div ng-repeat="distance in route.distances track by $index">
                                     <div class="label label-info path">{{distance | number: 1}} км</div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-sm btn-danger" type="button" ng-click="deleteRoute()">Очистить маршрут</button>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <button class="btn btn-sm btn-danger" type="button" ng-click="deleteRoute()">Очистить маршрут</button>
+                            <button class="btn btn-sm btn-primary" type="button" ng-click="optimizeRoute()">Оптимизировать маршрут</button>
+                        </div>
+                    </div>
+                    <div ng-if="calculate" class="waybill__calculate__progressbar row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" ng-style="{'width': percent + '%'}">
+                                    {{percent}}%
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -94,3 +94,9 @@ body{
 .waybill .modal-footer .btn{
     font-size: 25px;
 }
+.waybill__calculate__progressbar{
+    margin-top: 7px;
+}
+.waybill__calculate__progressbar .progress{
+    margin-bottom: 0;
+}
