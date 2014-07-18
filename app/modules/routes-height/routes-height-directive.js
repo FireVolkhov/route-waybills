@@ -7,15 +7,14 @@
  */
 "use strict";
 
-angular.module('routes-height-directive', ['ui.bootstrap.position', 'ng-if-event'])
-	.directive('routesHeight', ['$window', '$position', '$timeout', function($window, $position, $timeout){
+angular.module('routes-height-directive', ['ui.bootstrap.position', 'ng-if-event', 'moment-event-service'])
+	.directive('routesHeight', ['$window', '$position', '$timeout', 'momentEvent', function($window, $position, $timeout, momentEvent){
 		return{
 			link: function(scope, elem, attrs){
 
 				angular.element($window).on('resize', resize);
-				var removeListener = scope.$on('routes-height-resize', function(){
-				    $timeout(resize);
-				});
+
+				var removeListener = momentEvent.on('routes-height-resize', resize);
 
 				scope.$on('$destroy', function(){
 					angular.element($window).off('resize', resize);
