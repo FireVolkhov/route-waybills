@@ -36,6 +36,7 @@ body{
 }
 .waybill .routes{
     background-color: #fffaeb;
+    min-height: 150px;
     max-height: 450px;
     overflow-y: auto;
 }

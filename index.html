@@ -22,6 +22,9 @@
     <script src="./app/modules/file-saver.js"></script>
     <script src="./app/modules/salesman.js"></script>
     <script src="./app/modules/ant-algorithms.js"></script>
+    <script src="./app/modules/routes-height/routes-height-directive.js"></script>
+    <script src="./app/modules/routes-height/position.js"></script>
+    <script src="./app/modules/routes-height/ng-if-event.js"></script>
 </head>
 <body>
     <div map-leaflet class="map"></div>
@@ -39,7 +42,7 @@
                 <div class="modal-body">
                     <button class="btn btn-sm btn-default" ng-class="{active: route.closed}" type="button" ng-click="route.closed = !route.closed">Замкнутый маршрут</button>
                 </div>
-                <div class="modal-body routes">
+                <div class="modal-body routes" routes-height>
                     <div ng-hide="route.points.length">
                         <h3>Маршрут пуст</h3>
                     </div>
@@ -78,7 +81,7 @@
                             <button class="btn btn-sm btn-primary" type="button" ng-click="optimizeRoute()">Оптимизировать маршрут</button>
                         </div>
                     </div>
-                    <div ng-if="calculate" class="waybill__calculate__progressbar row">
+                    <div ng-if-event="calculate" broadcast-event="routes-height-resize" class="waybill__calculate__progressbar row">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <div class="progress">
                                 <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" ng-style="{'width': percent + '%'}">
