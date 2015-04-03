@@ -12,7 +12,7 @@
 	angular.module('waybills', ['underscore', 'Leaflet', 'osrm', 'nominatim', 'point', 'file-saver'])
 		.controller('mainCtrl', ['underscore', '$scope', '$timeout', '$window', 'osrm', 'nominatim', 'Point', 'saveAs', function(underscore, $scope, $timeout, $window, osrm, nominatim, Point, saveAs){
 			var debounceFinishChange = underscore.debounce(finishChange, 150),
-				setCoordinatesForChildren;
+				setCoordinatesForChildren;'sds';
 
 			$scope.route = {
 				points: [],
